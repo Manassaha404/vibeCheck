@@ -1,0 +1,1 @@
+ALTER TABLE "auths" DROP COLUMN "refresh_token";

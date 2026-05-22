@@ -1,6 +1,6 @@
 import http from "node:http";
 import { app as expressApplication } from "./server";
-
+import "dotenv/config";
 import { env } from "./env";
 
 async function init() {

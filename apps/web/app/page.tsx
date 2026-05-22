@@ -1,11 +1,9 @@
 import React from 'react'
-import { api } from '../trpc/server'
 
-const page = async() => {
-  const responce = await api.health.getHealth.query()
+const page = () => {
   return (
-    <div>{responce}</div>
+    <div>page</div>
   )
 }
 
-export default page;
+export default page

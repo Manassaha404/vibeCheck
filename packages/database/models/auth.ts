@@ -6,7 +6,7 @@ import {
   pgEnum,
   boolean,
 } from "drizzle-orm/pg-core";
-import { userTable } from "./user.ts";
+import { userTable } from "./user";
 
 export const rolesEnum = pgEnum("roles", ["user" , "admin"]);
 
@@ -18,7 +18,6 @@ export const authTable = pgTable("auths", {
       onDelete: "cascade",
     })
     .notNull(),
-  refreshToken: varchar("refresh_token"),
   verificationOtp: varchar("verification_otp"),
   verificationOtpExpiresAt: timestamp("verification_otp_expires_at"),
   passwordResetOtp: varchar("password_reset_otp"),
