@@ -47,60 +47,61 @@
     --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-/* Set your custom dark palette as the default */
+/* Awwwards-Winning Premium Dark Palette */
 :root, .dark {
-    /* Backgrounds: #222831 */
-    --background: #222831;
-    --foreground: #EEEEEE;
+    /* Backgrounds: Deep, immersive void black */
+    --background: #0A0A0B;
+    --foreground: #F4F4F5;
     
-    --card: #222831;
-    --card-foreground: #EEEEEE;
+    /* Slightly elevated surfaces */
+    --card: #121214;
+    --card-foreground: #F4F4F5;
     
-    --popover: #222831;
-    --popover-foreground: #EEEEEE;
+    --popover: #121214;
+    --popover-foreground: #F4F4F5;
 
-    /* Primary Accent: #00ADB5 */
-    --primary: #00ADB5;
-    --primary-foreground: #222831; /* Dark text on primary cyan buttons for contrast */
+    /* Primary Accent: Acid/Volt Green - High attention, very modern */
+    --primary: #E2FF32;
+    --primary-foreground: #000000; /* Crisp black text on the bright accent */
 
-    /* Secondary / Muted / Accents: #393E46 */
-    --secondary: #393E46;
-    --secondary-foreground: #EEEEEE;
+    /* Secondary / Muted: Sleek, low-contrast dark zinc */
+    --secondary: #1E1E22;
+    --secondary-foreground: #E4E4E7;
     
-    --muted: #393E46;
-    --muted-foreground: #EEEEEE;
+    --muted: #1E1E22;
+    --muted-foreground: #A1A1AA; /* Elegant dim gray for subtext */
     
-    --accent: #393E46;
-    --accent-foreground: #EEEEEE;
+    --accent: #1E1E22;
+    --accent-foreground: #F4F4F5;
 
-    /* Destructive (Maintained a standard dark red for error states) */
-    --destructive: oklch(0.704 0.191 22.216);
+    /* Destructive: A vivid, punchy crimson */
+    --destructive: #EF4444;
 
-    /* Borders & Inputs: #393E46 */
-    --border: #393E46;
-    --input: #393E46;
+    /* Borders & Inputs: Subtle structural lines */
+    --border: #27272A;
+    --input: #27272A;
     
-    /* Focus Rings: #00ADB5 */
-    --ring: #00ADB5;
+    /* Focus Rings: Glowing acid green */
+    --ring: #E2FF32;
 
     /* Sidebar mappings */
-    --sidebar: #222831;
-    --sidebar-foreground: #EEEEEE;
-    --sidebar-primary: #00ADB5;
-    --sidebar-primary-foreground: #222831;
-    --sidebar-accent: #393E46;
-    --sidebar-accent-foreground: #EEEEEE;
-    --sidebar-border: #393E46;
-    --sidebar-ring: #00ADB5;
+    --sidebar: #0A0A0B;
+    --sidebar-foreground: #F4F4F5;
+    --sidebar-primary: #E2FF32;
+    --sidebar-primary-foreground: #000000;
+    --sidebar-accent: #1E1E22;
+    --sidebar-accent-foreground: #F4F4F5;
+    --sidebar-border: #27272A;
+    --sidebar-ring: #E2FF32;
 
-    /* Charts (Incorporating your palette) */
-    --chart-1: #00ADB5;
-    --chart-2: #393E46;
-    --chart-3: #EEEEEE;
-    --chart-4: oklch(0.371 0 0); /* Kept standard fallbacks for extra charts */
-    --chart-5: oklch(0.269 0 0);
+    /* Charts (Monochromatic + Acid Accent) */
+    --chart-1: #E2FF32;
+    --chart-2: #F4F4F5;
+    --chart-3: #A1A1AA;
+    --chart-4: #27272A; 
+    --chart-5: #1E1E22;
 
-    --radius: 0.625rem;
+    --radius: 0.75rem; /* Slightly larger border radius for modern premium feel */
 }
 
 @layer base {

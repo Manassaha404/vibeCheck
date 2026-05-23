@@ -12,6 +12,7 @@ import { TRPCError } from "@trpc/server";
 import { AppError } from "@repo/error";
 import { sendVerificationEmail, sendPasswordResetEmail } from "../../utils/email";
 import { generateAccessToken, generateRefreshToken } from "../../utils/jwt";
+import { zodUndefinedModel } from "../../schema";
 
 const handleRouteError = (error: unknown) => {
   if (error instanceof AppError) {
@@ -99,7 +100,7 @@ export const authRouter = router({
       });
       return { message };
     }),
-  getme:protectedProcedure.input(getMeDto).mutation(async({input, ctx})=>{
+  getme:protectedProcedure.input(zodUndefinedModel).query(async({ctx})=>{
     const {user} = await authServices.getme({id:ctx.user.id})
     return {user};
   }),

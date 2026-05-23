@@ -1,9 +1,19 @@
-import React from 'react'
+"use client";
+import React from "react";
+import { Navbar } from "@/components/landing/Navbar";
+import { Hero } from "@/components/landing/Hero";
+import { Features } from "@/components/landing/Features";
+import { Pricing } from "@/components/landing/Pricing";
+import { Footer } from "@/components/landing/Footer";
 
-const page = () => {
+export default function LandingPage() {
   return (
-    <div>page</div>
-  )
+    <main className="min-h-screen bg-background text-foreground font-sans selection:bg-primary selection:text-primary-foreground">
+      <Navbar />
+      <Hero />
+      <Features />
+      <Pricing />
+      <Footer />
+    </main>
+  );
 }
-
-export default page
