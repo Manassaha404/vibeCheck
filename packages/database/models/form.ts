@@ -9,7 +9,7 @@ import {
   integer,
   uniqueIndex,
 } from "drizzle-orm/pg-core";
-import { userTable } from "./user.ts";
+import { userTable } from "./user";
 
 export const visibilityEnum = pgEnum('visibility', ['public', 'unlisted', 'draft'])
 

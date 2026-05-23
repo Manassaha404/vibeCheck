@@ -13,19 +13,9 @@ import { AppError } from "@repo/error";
 import { sendVerificationEmail, sendPasswordResetEmail } from "../../utils/email";
 import { generateAccessToken, generateRefreshToken } from "../../utils/jwt";
 import { zodUndefinedModel } from "../../schema";
+import { handleRouteError } from "../../utils/error";
 
-const handleRouteError = (error: unknown) => {
-  if (error instanceof AppError) {
-    throw new TRPCError({
-      code: error.code,
-      message: error.message,
-    });
-  }
-  throw new TRPCError({
-    code: "INTERNAL_SERVER_ERROR",
-    message: "An unexpected error occurred",
-  });
-};
+
 
 export const authRouter = router({
   registerUser: publicProcedure

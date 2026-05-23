@@ -14,7 +14,7 @@ export const Navbar = () => {
       setUserInfo({ id: undefined, email: undefined, fullname: undefined });
     },
   });
-  const handleDashboard = () => router.push("/");
+  const handleDashboard = () => router.push("/dashboard");
   const handleLogin = () => router.push("/signin");
   const handleGetStarted = () => router.push("/signup");
   const handleLogout = () => logoutUser();

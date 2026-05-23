@@ -23,6 +23,7 @@
     "gsap": "^3.15.0",
     "input-otp": "^1.4.2",
     "lucide-react": "^1.16.0",
+    "motion": "^12.40.0",
     "next": "16.1.0",
     "postcss": "^8.5.15",
     "radix-ui": "^1.4.3",
