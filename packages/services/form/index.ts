@@ -1,6 +1,6 @@
-import db, { count, eq, sql } from "@repo/database";
-import { getAllCreatedFormsDto, getAllCreatedFormsType, createFormDto, createFormType } from "./model";
-import { formTable, responseTable } from "@repo/database/schema";
+import db, { count, eq, sql, and } from "@repo/database";
+import { getAllCreatedFormsDto, getAllCreatedFormsType, createFormDto, createFormType, getFormByIdDto, getFormByIdType, addFormFieldsType, addFormFieldsDto, editFormTitleDescriptionVisibilityType, editFormTitleDescriptionVisibilityDto } from "./model";
+import { fieldTable, formTable, responseTable } from "@repo/database/schema";
 
 class FormServices {
   public async getAllCreatedFormsWithToTalResponces(
@@ -41,7 +41,7 @@ class FormServices {
       .leftJoin(responsesCount, eq(formTable.id, responsesCount.formId))
       .where(eq(formTable.userId, userId));
 
-    return {forms};
+    return { forms };
   }
   public async createForm(payload: createFormType) {
     const data = await createFormDto.parseAsync(payload);
@@ -53,8 +53,8 @@ class FormServices {
         title: data.title,
         slug: data.slug,
         description: data.description,
-        visibility: data.visibility,       
-        isPublished: false, 
+        visibility: data.visibility,
+        isPublished: false,
         allowResponseEdit: data.allowResponseEdit,
         responseLimit: data.responseLimit,
         expiresAt: data.expiresAt ? new Date(data.expiresAt) : undefined,
@@ -67,6 +67,52 @@ class FormServices {
         title: formTable.title,
       });
 
+    return { form };
+  }
+
+  public async getFormById(payload: getFormByIdType) {
+    const data = await getFormByIdDto.parseAsync(payload);
+
+    const [form] = await db
+      .select()
+      .from(formTable)
+      .where(
+        and(
+          eq(formTable.id, data.formId),
+          eq(formTable.userId, data.userId)
+        )
+      );
+
+    if (!form) {
+      throw new Error("Form not found");
+    }
+
+    return { form };
+  }
+
+  public async addFormFields(payload: addFormFieldsType) {
+    const data = await addFormFieldsDto.parseAsync(payload);
+    const insertData = data.fields.map((f) => ({...f, formId: data.formId}))
+    const formFields = await db
+      .insert(fieldTable)
+      .values(insertData)
+      .returning();
+
+    return { formFields };
+  }
+
+  public async editFormTitleDescriptionVisibility(payload: editFormTitleDescriptionVisibilityType) {
+    const data = await editFormTitleDescriptionVisibilityDto.parseAsync(payload);
+
+    const [form] = await db
+      .update(formTable)
+      .set({
+        title: data.title,
+        description: data.description,
+        visibility: data.visibility,
+      })
+      .where(eq(formTable.id, data.formId))
+      .returning();
     return { form };
   }
 }

@@ -22,3 +22,7 @@ export const createFormModel = z.object({
         path: ["password"],
     }
 )
+
+export const getFormByIdModel = z.object({
+    id: z.string().uuid().describe('id of the form')
+})

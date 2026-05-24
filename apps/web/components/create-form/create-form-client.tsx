@@ -55,8 +55,6 @@ export function CreateFormClient() {
   } = form;
 
   const values = watch();
-
-  // Save as draft — always sets visibility: "draft"
   const handleSaveDraft = useCallback(
     handleSubmit(async (data) => {
       const payload = {
@@ -66,11 +64,13 @@ export function CreateFormClient() {
       };
       setIsSubmitting(true);
       try {
-        await createFormMutation.mutateAsync(payload);
+        const response = await createFormMutation.mutateAsync(payload);
+        if (!response?.form?.id) throw new Error("No form ID returned");
+        
         reset(data);
         toast.success("Draft saved!");
         setTimeout(() => {
-          router.push("/form/draft");
+          router.replace(`/form/draft/${response?.form?.id}`);
         }, 300);
       } catch (error) {
         toast.error("Failed to save draft", {
@@ -85,24 +85,20 @@ export function CreateFormClient() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Subtle radial gradient */}
       <div className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(226,255,50,0.05),transparent)]" />
 
-      {/* Sticky header */}
       <FormPageHeader
         isSubmitting={isSubmitting}
         isDirty={isDirty}
         onSaveDraft={handleSaveDraft}
       />
 
-      {/* Main layout */}
       <motion.div
         className="mx-auto grid max-w-6xl grid-cols-1 gap-6 px-6 py-8 lg:grid-cols-[1fr_340px]"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
-        {/* Left column — form sections */}
         <div className="space-y-5">
           <motion.div variants={itemVariants}>
             <FormBasicsSection form={form} />
@@ -113,7 +109,6 @@ export function CreateFormClient() {
           </motion.div>
         </div>
 
-        {/* Right column — live preview */}
         <motion.div variants={itemVariants} className="hidden lg:block">
           <FormPreviewCard values={values} />
         </motion.div>

@@ -269,7 +269,7 @@ export function FormGrid({ forms }: FormCardProps) {
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => router.push(`/builder/${form.id}`)}
+                        onClick={() => router.push(form.visibility === "draft" ? `/form/draft/${form.id}` : `/builder/${form.id}`)}
                         className="h-8 gap-1.5 rounded-lg px-3 text-[11px] text-muted-foreground transition-all duration-200 hover:bg-primary/10 hover:text-primary"
                       >
                         <Settings className="h-3.5 w-3.5" />
