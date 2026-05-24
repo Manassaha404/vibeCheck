@@ -5,6 +5,7 @@ import { GlobalProviders } from "../providers/global";
 import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { AuthProvider } from "@/providers/auth-provider";
+import { Toaster } from "@/components/ui/sonner";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -32,6 +33,7 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <GlobalProviders>
           <AuthProvider>{children}</AuthProvider>
+          <Toaster richColors position="top-right" />
         </GlobalProviders>
       </body>
     </html>

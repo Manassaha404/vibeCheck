@@ -1,5 +1,5 @@
 import db, { count, eq, sql } from "@repo/database";
-import { getAllCreatedFormsDto, getAllCreatedFormsType } from "./model";
+import { getAllCreatedFormsDto, getAllCreatedFormsType, createFormDto, createFormType } from "./model";
 import { formTable, responseTable } from "@repo/database/schema";
 
 class FormServices {
@@ -42,6 +42,32 @@ class FormServices {
       .where(eq(formTable.userId, userId));
 
     return {forms};
+  }
+  public async createForm(payload: createFormType) {
+    const data = await createFormDto.parseAsync(payload);
+
+    const [form] = await db
+      .insert(formTable)
+      .values({
+        userId: data.userId,
+        title: data.title,
+        slug: data.slug,
+        description: data.description,
+        visibility: data.visibility,       
+        isPublished: false, 
+        allowResponseEdit: data.allowResponseEdit,
+        responseLimit: data.responseLimit,
+        expiresAt: data.expiresAt ? new Date(data.expiresAt) : undefined,
+        passwordNeeded: data.passwordNeeded,
+        password: data.passwordNeeded ? data.password : null,
+      })
+      .returning({
+        id: formTable.id,
+        slug: formTable.slug,
+        title: formTable.title,
+      });
+
+    return { form };
   }
 }
 export default FormServices;

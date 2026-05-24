@@ -1,11 +1,6 @@
-import {z} from "zod"
+import { z } from "zod";
 
-export const getAllCreatedFormsDto = z.object({
-    userId: z.uuid().describe('id of the user'),
-})
-
-export const createFormDto = z.object({
-    userId: z.uuid().describe('id of the user'),
+export const createFormModel = z.object({
     title: z.string().min(3).max(255).describe('title of the form'),
     slug: z.string().min(3).max(150).describe('slug of the form'),
     description: z.string().max(1000).optional().describe('description of the form'),
@@ -27,6 +22,3 @@ export const createFormDto = z.object({
         path: ["password"],
     }
 )
-
-export type getAllCreatedFormsType = z.infer<typeof getAllCreatedFormsDto>
-export type createFormType = z.infer<typeof createFormDto>

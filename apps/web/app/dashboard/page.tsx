@@ -29,9 +29,9 @@ export default function DashboardPage() {
         <StatCards forms={data?.forms || []}/>        
         <div className="space-y-4">
           <h2 className="text-xl font-semibold tracking-tight">Recent Forms</h2>
-          <FormGrid forms={data?.forms || []}/>
+          <FormGrid />
         </div>
       </div>  
     </div>
   );
-}
+} 

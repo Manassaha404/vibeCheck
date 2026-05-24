@@ -25,6 +25,8 @@ export const formTable = pgTable("forms", {
   isPublished: boolean('is_published').default(false).notNull(),
   allowResponseEdit: boolean('allow_response_edit').default(false).notNull(),
   responseLimit: integer('response_limit'),
+  password: varchar('password', { length: 255 }),
+  passwordNeeded: boolean('password_needed').default(false).notNull(),
   expiresAt: timestamp('expires_at'),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),

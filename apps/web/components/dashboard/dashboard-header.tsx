@@ -1,7 +1,9 @@
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 export function DashboardHeader() {
+  const router = useRouter();
   return (
     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
       <div>
@@ -10,7 +12,7 @@ export function DashboardHeader() {
           Manage your forms, track responses, and analyze data.
         </p>
       </div>
-      <Button className="shrink-0 gap-2 font-medium">
+      <Button onClick={() => router.push("/form/create-form")} className="shrink-0 gap-2 font-medium">
         <Plus className="h-4 w-4" />
         Create New Form
       </Button>

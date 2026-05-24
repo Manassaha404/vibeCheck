@@ -15,6 +15,13 @@
       "when": 1779475828846,
       "tag": "0001_cuddly_sinister_six",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1779611124415,
+      "tag": "0002_material_alice",
+      "breakpoints": true
     }
   ]
 }

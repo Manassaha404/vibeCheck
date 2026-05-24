@@ -34,11 +34,11 @@ const filterOptions: {
   label: string;
   icon: React.ElementType;
 }[] = [
-  { id: "all", label: "All Forms", icon: LayoutGrid },
-  { id: "public", label: "Public", icon: Globe },
-  { id: "unlisted", label: "Unlisted", icon: Link2 },
-  { id: "draft", label: "Drafts", icon: FileEdit },
-];
+    { id: "all", label: "All Forms", icon: LayoutGrid },
+    { id: "public", label: "Public", icon: Globe },
+    { id: "unlisted", label: "Unlisted", icon: Link2 },
+    { id: "draft", label: "Drafts", icon: FileEdit },
+  ];
 
 const visibilityStyles: Record<
   string,
@@ -98,45 +98,34 @@ const cardVariants = {
   },
 };
 
-export function FormGrid() {
+interface FormCardProps {
+  forms: {
+    title: string;
+    id: string;
+    visibility: "public" | "unlisted" | "draft";
+    description: string | null;
+    createdAt: string;
+    updatedAt: string | null;
+    slug: string;
+    isPublished: boolean;
+    allowResponseEdit: boolean;
+    responseLimit: number | null;
+    expiresAt: string | null;
+    totalResponses: number
+  }[];
+}
+
+export function FormGrid({ forms }: FormCardProps) {
   const router = useRouter();
   const [filter, setFilter] = useState<VisibilityFilter>("all");
 
-  const { data, isLoading, isError } = trpc.form.getAllCreatedForms.useQuery(
-    undefined,
-    {
-      staleTime: 1000 * 60,
-      gcTime: 1000 * 60 * 5,
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-    },
-  );
 
-  const forms = data?.forms || [];
-
-  // Handle Filtering safely
   const filteredForms = (forms || []).filter((form) =>
     filter === "all" ? true : form.visibility === filter,
   );
 
-  if (isLoading) {
-    return <PageLoader />;
-  }
 
-  // Error State fallback
-  if (isError) {
-    return (
-      <div className="flex h-[300px] w-full flex-col items-center justify-center rounded-2xl border border-destructive/20 bg-destructive/5 text-destructive">
-        <Loader2 className="mb-2 h-6 w-6 animate-spin" />
-        <p className="text-sm font-medium">
-          Failed to load forms. Please refresh.
-        </p>
-      </div>
-    );
-  }
-
-  // 2. Master Empty State (User has absolutely 0 forms)
-  if (forms?.length === 0) {
+  if (forms?.length === 0 || !forms) {
     return (
       <motion.div
         initial={{ opacity: 0, y: 10 }}
@@ -154,7 +143,7 @@ export function FormGrid() {
           to collect responses effortlessly.
         </p>
         <Button
-          onClick={() => router.push("/builder")}
+          onClick={() => router.push("/form/create-form")}
           className="h-11 rounded-full px-8 font-medium shadow-lg transition-all hover:scale-105 hover:shadow-primary/25"
         >
           <Plus className="mr-2 h-4 w-4" />
@@ -166,7 +155,6 @@ export function FormGrid() {
 
   return (
     <div className="space-y-5">
-      {/* FILTER */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="inline-flex h-10 items-center rounded-xl border border-border/60 bg-muted/40 p-1">
           {filterOptions.map((option) => {
@@ -177,11 +165,10 @@ export function FormGrid() {
               <button
                 key={option.id}
                 onClick={() => setFilter(option.id)}
-                className={`relative inline-flex h-8 items-center justify-center gap-2 rounded-lg px-4 text-sm font-medium transition-all duration-200 ${
-                  isActive
-                    ? "text-foreground"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
+                className={`relative inline-flex h-8 items-center justify-center gap-2 rounded-lg px-4 text-sm font-medium transition-all duration-200 ${isActive
+                  ? "text-foreground"
+                  : "text-muted-foreground hover:text-foreground"
+                  }`}
               >
                 {isActive && (
                   <motion.span
@@ -191,9 +178,8 @@ export function FormGrid() {
                   />
                 )}
                 <Icon
-                  className={`relative z-10 h-4 w-4 ${
-                    isActive ? "text-primary" : "text-muted-foreground"
-                  }`}
+                  className={`relative z-10 h-4 w-4 ${isActive ? "text-primary" : "text-muted-foreground"
+                    }`}
                 />
                 <span className="relative z-10">{option.label}</span>
               </button>
@@ -220,7 +206,7 @@ export function FormGrid() {
             {filteredForms.map((form) => {
               const style =
                 visibilityStyles[form.visibility] ?? visibilityStyles["draft"];
-              const BadgeIcon = style?.icon || Globe;
+              const BadgeIcon = style?.icon;
 
               return (
                 <motion.div
@@ -230,7 +216,6 @@ export function FormGrid() {
                   className="h-full"
                 >
                   <Card className="group relative flex h-full min-h-[220px] flex-col overflow-hidden border border-border/50 bg-background/80 backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-border hover:shadow-lg hover:shadow-black/[0.04]">
-                    {/* HEADER */}
                     <CardHeader className="pb-3 pt-4">
                       <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0 flex-1">
@@ -259,7 +244,6 @@ export function FormGrid() {
                       </div>
                     </CardHeader>
 
-                    {/* CONTENT */}
                     <CardContent className="flex-1 pb-4">
                       <span
                         className={`inline-flex h-7 items-center gap-1.5 rounded-full border px-2.5 text-[11px] font-medium capitalize ${style?.bg} ${style?.text} ${style?.border}`}
@@ -267,17 +251,14 @@ export function FormGrid() {
                         <span
                           className={`h-1.5 w-1.5 rounded-full ${style?.dot}`}
                         />
-                        <BadgeIcon className="h-3 w-3" />
                         {form.visibility}
                       </span>
                     </CardContent>
 
-                    {/* FOOTER */}
                     <CardFooter className="mt-auto flex h-[56px] items-center justify-between border-t border-border/50 pt-0">
                       <div className="flex items-center gap-1.5 text-muted-foreground">
                         <BarChart2 className="h-3.5 w-3.5" />
                         <span className="text-xs font-medium tabular-nums">
-                          {/* 🚀 Ensure responseLimit or response count is derived safely */}
                           {form.responseLimit || 0}
                           <span className="ml-1 font-normal opacity-60">
                             responses
@@ -295,8 +276,6 @@ export function FormGrid() {
                         Edit
                       </Button>
                     </CardFooter>
-
-                    {/* BORDER BEAM — only visible on hover */}
                     <BorderBeam
                       duration={6}
                       size={300}
