@@ -4,6 +4,7 @@ import { Workflow } from "lucide-react";
 import { Button } from "../ui/button";
 import { useUserInfoStore } from "@/store/userInfoStore";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { trpc } from "@/trpc/client";
 
 export const Navbar = () => {
@@ -35,12 +36,12 @@ export const Navbar = () => {
           >
             Features
           </a>
-          <a
-            href="#templates"
+          <Link
+            href="/public-form"
             className="hover:text-foreground transition-colors"
           >
-            Public Polls
-          </a>
+            Public Forms
+          </Link>
           <a
             href="#pricing"
             className="hover:text-foreground transition-colors"

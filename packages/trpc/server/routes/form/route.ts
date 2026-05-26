@@ -28,6 +28,15 @@ export const formRouter = router({
         handleRouteError(error);
       }
     }),
+  getAllPublicForms: publicProcedure
+    .query(async () => {
+      try {
+        const { forms } = await formServises.getAllPublicForms();
+        return { forms };
+      } catch (error) {
+        handleRouteError(error);
+      }
+    }),
   createForm: protectedProcedure
     .input(createFormModel)
     .mutation(async ({ ctx, input }) => {

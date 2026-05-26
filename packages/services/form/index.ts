@@ -168,6 +168,44 @@ class FormServices {
     return { forms };
   }
 
+  public async getAllPublicForms() {
+    const responsesCount = db.$with("responses_count").as(
+      db
+        .select({
+          formId: responseTable.formId,
+          count: count(responseTable.id).as("count"),
+        })
+        .from(responseTable)
+        .groupBy(responseTable.formId),
+    );
+
+    const forms = await db
+      .with(responsesCount)
+      .select({
+        id: formTable.id,
+        title: formTable.title,
+        slug: formTable.slug,
+        description: formTable.description,
+        visibility: formTable.visibility,
+        isPublished: formTable.isPublished,
+        allowResponseEdit: formTable.allowResponseEdit,
+        responseLimit: formTable.responseLimit,
+        expiresAt: formTable.expiresAt,
+        passwordNeeded: formTable.passwordNeeded,
+        createdAt: formTable.createdAt,
+        updatedAt: formTable.updatedAt,
+        totalResponses: sql<number>`COALESCE(${responsesCount.count}, 0)`.as(
+          "totalResponses",
+        ),
+      })
+      .from(formTable)
+      .leftJoin(responsesCount, eq(formTable.id, responsesCount.formId))
+      .where(and(eq(formTable.visibility, "public"), eq(formTable.isPublished, true)))
+      .orderBy(desc(formTable.createdAt));
+
+    return { forms };
+  }
+
   public async createForm(payload: createFormType) {
     const data = await createFormDto.parseAsync(payload);
 
