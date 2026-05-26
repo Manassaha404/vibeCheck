@@ -13,8 +13,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const { setUserInfo, setInitialized } = useUserInfoStore();
   const { data, isLoading, isError } = trpc.auth.getme.useQuery(undefined, {
-  retry: false, 
-})
+    retry: false,
+  });
 
   useEffect(() => {
     if (isLoading) return;

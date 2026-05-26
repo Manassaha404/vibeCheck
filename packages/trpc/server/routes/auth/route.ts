@@ -10,12 +10,13 @@ import {
 import { authServices } from "../../services";
 import { TRPCError } from "@trpc/server";
 import { AppError } from "@repo/error";
-import { sendVerificationEmail, sendPasswordResetEmail } from "../../utils/email";
+import {
+  sendVerificationEmail,
+  sendPasswordResetEmail,
+} from "../../utils/email";
 import { generateAccessToken, generateRefreshToken } from "../../utils/jwt";
 import { zodUndefinedModel } from "../../schema";
 import { handleRouteError } from "../../utils/error";
-
-
 
 export const authRouter = router({
   registerUser: publicProcedure
@@ -90,9 +91,9 @@ export const authRouter = router({
       });
       return { message };
     }),
-  getme:protectedProcedure.input(zodUndefinedModel).query(async({ctx})=>{
-    const {user} = await authServices.getme({id:ctx.user.id})
-    return {user};
+  getme: protectedProcedure.input(zodUndefinedModel).query(async ({ ctx }) => {
+    const { user } = await authServices.getme({ id: ctx.user.id });
+    return { user };
   }),
   logout: protectedProcedure.mutation(async ({ ctx }) => {
     try {

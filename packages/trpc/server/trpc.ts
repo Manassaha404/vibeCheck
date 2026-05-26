@@ -13,7 +13,26 @@ export const tRPCContext = initTRPC
   .create({});
 
 export const router = tRPCContext.router;
-export const publicProcedure = tRPCContext.procedure;
+
+
+const getGuestToken = tRPCContext.middleware(({ctx, next}) => {
+  let guestToken;
+  guestToken = ctx.getCookie("guestToken");
+  if(!guestToken){
+    guestToken = crypto.randomUUID();
+    ctx.setCookie("guestToken", guestToken, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24 * 365 * 20,
+      path: "/",
+    });
+  }
+  return next({ctx: {...ctx, guestToken}});
+})
+
+export const publicProcedure = tRPCContext.procedure.use(getGuestToken);
+
 
 const isAuthed = tRPCContext.middleware(({ ctx, next }) => {
   const accessToken = ctx.getCookie("accessToken");

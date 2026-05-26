@@ -31,8 +31,6 @@ function slugify(str: string) {
 export function FormBasicsSection({ form }: FormBasicsSectionProps) {
   const { control, formState: { errors }, setValue } = form;
   const title = useWatch({ control, name: "title" });
-
-  // Auto-generate slug from title (only if slug hasn't been manually edited)
   useEffect(() => {
     if (title) {
       setValue("slug", slugify(title), { shouldValidate: false });

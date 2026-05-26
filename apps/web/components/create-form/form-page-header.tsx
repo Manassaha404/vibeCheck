@@ -45,8 +45,6 @@ export function FormPageHeader({
             )}
           </div>
         </div>
-
-        {/* Right — Save Draft only */}
         <Button
           type="button"
           size="sm"

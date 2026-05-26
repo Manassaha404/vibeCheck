@@ -56,8 +56,77 @@ export const editFormTitleDescriptionVisibilityDto = z.object({
 })
 
 
+export const getAnalyticsForSpecificFormDto = z.object({
+    formId: z.string().uuid().describe('id of the form'),
+})
+
+export const getFormResponsesDto = z.object({
+    formId: z.string().uuid().describe('id of the form'),
+    page: z.number().describe('page number'),
+    pageSize: z.number().describe('page size'),
+})
+
+export const getFormDataForSubmitFormDto = z.object({
+    formId: z.string().uuid().describe('id of the form'),
+})
+
+
+export const submitFormResponseDto = z.object({
+    formId: z.string().uuid().describe('id of the form'),
+    answers: z.array(z.object({
+        fieldId: z.string().uuid().describe('id of the field'),
+        value: z.string().describe('value of the answer')
+    })).describe('array of answers'),
+    guestToken: z.string().uuid().describe('this is guest Token')
+})
+export const formPasswordCheckDto = z.object({
+    formId: z.string().uuid().describe('id of the form'),
+    password: z.string().trim().describe('password of the form')
+})
+
+export const formActionWithGuestTokenDto = z.object({
+    formId: z.string().uuid().describe('id of the form'),
+    guestToken: z.string().uuid().describe('this is guest Token')
+});
+
+export const updateFormResponseDto = z.object({
+    formId: z.string().uuid().describe('id of the form'),
+    answers: z.array(z.object({
+        fieldId: z.string().uuid().describe('id of the field'),
+        value: z.string().describe('value of the answer')
+    })).describe('array of answers'),
+    guestToken: z.string().uuid().describe('this is guest Token')
+});
+
+
 export type getAllCreatedFormsType = z.infer<typeof getAllCreatedFormsDto>
 export type createFormType = z.infer<typeof createFormDto>
 export type getFormByIdType = z.infer<typeof getFormByIdDto>
 export type addFormFieldsType = z.infer<typeof addFormFieldsDto>
 export type editFormTitleDescriptionVisibilityType = z.infer<typeof editFormTitleDescriptionVisibilityDto>
+export type getAnalyticsForSpecificFormType = z.infer<typeof getAnalyticsForSpecificFormDto>;
+export type getFormResponsesType = z.infer<typeof getFormResponsesDto>;
+export type getFormDataForSubmitFormType = z.infer<typeof getFormDataForSubmitFormDto>;
+export type submitFormResponseType = z.infer<typeof submitFormResponseDto>;
+export type formPasswordCheckType = z.infer<typeof formPasswordCheckDto>;
+export type formActionWithGuestTokenType = z.infer<typeof formActionWithGuestTokenDto>;
+export type updateFormResponseType = z.infer<typeof updateFormResponseDto>;
+
+export const getFormResponsesForExportDto = z.object({
+    formId: z.string().uuid().describe('id of the form'),
+    fieldIds: z.array(z.string().uuid()).optional().describe('specific field ids to include'),
+    startDate: z.string().datetime().optional().describe('start date filter'),
+    endDate: z.string().datetime().optional().describe('end date filter'),
+});
+export type getFormResponsesForExportType = z.infer<typeof getFormResponsesForExportDto>;
+
+export const getResponseByIdDto = z.object({
+    responseId: z.string().uuid().describe('id of the response'),
+    formId: z.string().uuid().describe('id of the form'),
+});
+export type getResponseByIdType = z.infer<typeof getResponseByIdDto>;
+
+export const deleteFormDto = z.object({
+    id: z.string().uuid().describe('id of the form to delete'),
+});
+export type deleteFormType = z.infer<typeof deleteFormDto>;

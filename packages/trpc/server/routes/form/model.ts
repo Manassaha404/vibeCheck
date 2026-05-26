@@ -26,3 +26,17 @@ export const createFormModel = z.object({
 export const getFormByIdModel = z.object({
     id: z.string().uuid().describe('id of the form')
 })
+
+export const submitFormResponseWithoutGuestTokenDto = z.object({
+    formId: z.string().uuid().describe('id of the form'),
+    answers: z.array(z.object({
+        fieldId: z.string().uuid().describe('id of the field'),
+        value: z.string().describe('value of the answer')
+    })).describe('array of answers'),
+});
+
+export const updateFormResponseWithoutGuestTokenDto = submitFormResponseWithoutGuestTokenDto;
+
+export const formActionDto = z.object({
+    formId: z.string().uuid().describe('id of the form'),
+});

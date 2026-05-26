@@ -21,22 +21,18 @@ interface FormPreviewCardProps {
 export function FormPreviewCard({ values }: FormPreviewCardProps) {
   return (
     <div className="sticky top-24 space-y-4">
-      {/* Preview label */}
       <div className="flex items-center gap-2">
         <Eye className="h-3.5 w-3.5 text-muted-foreground" />
         <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
           Live Preview
         </span>
       </div>
-
-      {/* Card preview */}
       <motion.div
         layout
         transition={{ duration: 0.2, ease: "easeOut" }}
         className="relative"
       >
         <Card className="overflow-hidden border border-border/60 bg-card/80 shadow-xl shadow-black/20 backdrop-blur-sm">
-          {/* Glowing top accent */}
           <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent" />
 
           <CardHeader className="pb-3 pt-5">
@@ -65,7 +61,6 @@ export function FormPreviewCard({ values }: FormPreviewCardProps) {
           </CardHeader>
 
           <CardContent className="space-y-4 pb-5">
-            {/* Description preview */}
             {values.description ? (
               <p className="text-sm leading-relaxed text-muted-foreground">
                 {values.description}
@@ -76,8 +71,6 @@ export function FormPreviewCard({ values }: FormPreviewCardProps) {
                 <div className="h-2.5 w-4/5 rounded-full bg-muted/40" />
               </div>
             )}
-
-            {/* Meta badges */}
             <div className="flex flex-wrap gap-2 pt-1">
               {values.passwordNeeded && (
                 <Badge
@@ -132,8 +125,6 @@ export function FormPreviewCard({ values }: FormPreviewCardProps) {
           </CardContent>
         </Card>
       </motion.div>
-
-      {/* Next step hint */}
       <div className="rounded-xl border border-border/40 bg-muted/20 p-3.5">
         <p className="text-[11px] font-medium text-muted-foreground">
           ⚡ What happens next

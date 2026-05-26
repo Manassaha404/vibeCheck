@@ -13,6 +13,9 @@ import {
   Plus,
   Loader2,
   FileText,
+  Trash2,
+  LineChart,
+  Lock,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -23,6 +26,20 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { BorderBeam } from "@/components/ui/border-beam";
 import { trpc } from "../../trpc/client";
 import PageLoader from "../PageLoader";
@@ -111,13 +128,33 @@ interface FormCardProps {
     allowResponseEdit: boolean;
     responseLimit: number | null;
     expiresAt: string | null;
-    totalResponses: number
+    totalResponses: number;
+    isPasswordProtected?: boolean;
   }[];
 }
 
 export function FormGrid({ forms }: FormCardProps) {
   const router = useRouter();
+  const utils = trpc.useUtils();
   const [filter, setFilter] = useState<VisibilityFilter>("all");
+  const [formToDelete, setFormToDelete] = useState<{ id: string; title: string } | null>(null);
+
+  const deleteMutation = trpc.form.deleteForm.useMutation({
+    onSuccess: () => {
+      utils.form.getAllCreatedForms.invalidate();
+      setFormToDelete(null);
+    },
+    onError: (err) => {
+      alert("Error deleting form: " + err.message);
+      setFormToDelete(null);
+    }
+  });
+
+  const handleDeleteConfirm = () => {
+    if (formToDelete) {
+      deleteMutation.mutate({ id: formToDelete.id });
+    }
+  };
 
 
   const filteredForms = (forms || []).filter((form) =>
@@ -191,8 +228,6 @@ export function FormGrid({ forms }: FormCardProps) {
           {filteredForms.length} {filteredForms.length === 1 ? "form" : "forms"}
         </p>
       </div>
-
-      {/* GRID */}
       <AnimatePresence mode="wait">
         {filteredForms.length > 0 ? (
           <motion.div
@@ -224,57 +259,95 @@ export function FormGrid({ forms }: FormCardProps) {
                               {form.title}
                             </h3>
                           </div>
-                          <div className="mt-1 h-[16px]">
-                            <p className="text-[11px] text-muted-foreground/70">
-                              Updated{" "}
-                              {new Date(
-                                form.updatedAt as any,
-                              ).toLocaleDateString()}
-                            </p>
-                          </div>
+                          {form.description && (
+                            <div className="mt-1">
+                              <p className="line-clamp-2 text-[11px] text-muted-foreground/70">
+                                {form.description}
+                              </p>
+                            </div>
+                          )}
                         </div>
 
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-8 w-8 shrink-0 rounded-lg opacity-0 transition-opacity duration-200 group-hover:opacity-100"
-                        >
-                          <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
-                        </Button>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8 shrink-0 rounded-lg opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+                            >
+                              <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem onClick={() => router.push(`/form/analytics/${form.id}`)}>
+                              <LineChart className="mr-2 h-4 w-4" />
+                              Analytics
+                            </DropdownMenuItem>
+                            <DropdownMenuItem className="text-destructive focus:bg-destructive/10 focus:text-destructive" onClick={() => {
+                              setFormToDelete({ id: form.id, title: form.title });
+                            }}>
+                              <Trash2 className="mr-2 h-4 w-4" />
+                              Delete
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                       </div>
                     </CardHeader>
 
-                    <CardContent className="flex-1 pb-4">
-                      <span
-                        className={`inline-flex h-7 items-center gap-1.5 rounded-full border px-2.5 text-[11px] font-medium capitalize ${style?.bg} ${style?.text} ${style?.border}`}
-                      >
+                    <CardContent className="flex-1 pb-4 flex flex-col gap-3">
+                      <div className="flex flex-wrap items-center gap-2">
                         <span
-                          className={`h-1.5 w-1.5 rounded-full ${style?.dot}`}
-                        />
-                        {form.visibility}
-                      </span>
+                          className={`inline-flex h-7 items-center gap-1.5 rounded-full border px-2.5 text-[11px] font-medium capitalize ${style?.bg} ${style?.text} ${style?.border}`}
+                        >
+                          <span
+                            className={`h-1.5 w-1.5 rounded-full ${style?.dot}`}
+                          />
+                          {form.visibility}
+                        </span>
+                        
+                        {form.isPublished && (
+                          <span className="inline-flex h-7 items-center rounded-full border border-primary/20 bg-primary/10 px-2.5 text-[11px] font-medium text-primary">
+                            Published
+                          </span>
+                        )}
+                        
+                        {form.expiresAt && (
+                          <span className="inline-flex h-7 items-center rounded-full border border-destructive/20 bg-destructive/10 px-2.5 text-[11px] font-medium text-destructive">
+                            Expires {new Date(form.expiresAt).toLocaleDateString()}
+                          </span>
+                        )}
+                        {form.isPasswordProtected && (
+                          <span className="inline-flex h-7 items-center gap-1 rounded-full border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900 px-2.5 text-[11px] font-medium text-zinc-600 dark:text-zinc-400">
+                            <Lock className="h-3 w-3" />
+                            Password Protected
+                          </span>
+                        )}
+                      </div>
                     </CardContent>
 
                     <CardFooter className="mt-auto flex h-[56px] items-center justify-between border-t border-border/50 pt-0">
                       <div className="flex items-center gap-1.5 text-muted-foreground">
                         <BarChart2 className="h-3.5 w-3.5" />
                         <span className="text-xs font-medium tabular-nums">
-                          {form.responseLimit || 0}
+                          {form.totalResponses || 0}
+                          {form.responseLimit ? ` / ${form.responseLimit}` : ""}
                           <span className="ml-1 font-normal opacity-60">
                             responses
                           </span>
                         </span>
                       </div>
 
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => router.push(form.visibility === "draft" ? `/form/draft/${form.id}` : `/builder/${form.id}`)}
-                        className="h-8 gap-1.5 rounded-lg px-3 text-[11px] text-muted-foreground transition-all duration-200 hover:bg-primary/10 hover:text-primary"
-                      >
-                        <Settings className="h-3.5 w-3.5" />
-                        Edit
-                      </Button>
+                      {form.visibility === "draft" && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => router.push(`/form/draft/${form.id}`)}
+                          className="h-8 gap-1.5 rounded-lg px-3 text-[11px] text-muted-foreground transition-all duration-200 hover:bg-primary/10 hover:text-primary"
+                        >
+                          <Settings className="h-3.5 w-3.5" />
+                          Edit
+                        </Button>
+                      )}
                     </CardFooter>
                     <BorderBeam
                       duration={6}
@@ -318,6 +391,26 @@ export function FormGrid({ forms }: FormCardProps) {
           </motion.div>
         )}
       </AnimatePresence>
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={!!formToDelete} onOpenChange={(open) => !open && setFormToDelete(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete Form</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete <strong className="text-foreground">"{formToDelete?.title}"</strong>? This action cannot be undone and will permanently delete the form and all its responses.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="mt-4">
+            <Button variant="outline" onClick={() => setFormToDelete(null)} disabled={deleteMutation.isPending}>
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={handleDeleteConfirm} disabled={deleteMutation.isPending}>
+              {deleteMutation.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {deleteMutation.isPending ? "Deleting..." : "Delete Form"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

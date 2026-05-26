@@ -95,7 +95,6 @@ export function FormSettingsSection({ form }: FormSettingsSectionProps) {
       </CardHeader>
 
       <CardContent className="divide-y divide-border/50 pb-2">
-        {/* Allow Response Edit */}
         <SettingsRow
           icon={PenLine}
           label="Allow Response Editing"
@@ -114,8 +113,6 @@ export function FormSettingsSection({ form }: FormSettingsSectionProps) {
             )}
           />
         </SettingsRow>
-
-        {/* Password Protection */}
         <div className="py-3.5">
           <SettingsRow
             icon={Lock}
@@ -135,8 +132,6 @@ export function FormSettingsSection({ form }: FormSettingsSectionProps) {
               )}
             />
           </SettingsRow>
-
-          {/* Animated password input — only visible when toggle is on */}
           {passwordNeeded && (
             <div className="mt-2 ml-10 flex flex-col gap-1">
               <Controller
@@ -177,8 +172,6 @@ export function FormSettingsSection({ form }: FormSettingsSectionProps) {
             </div>
           )}
         </div>
-
-        {/* Response Limit */}
         <SettingsRow
           icon={Users}
           label="Response Limit"
@@ -215,8 +208,6 @@ export function FormSettingsSection({ form }: FormSettingsSectionProps) {
             )}
           />
         </SettingsRow>
-
-        {/* Expires At */}
         <SettingsRow
           icon={CalendarClock}
           label="Expiry Date"
