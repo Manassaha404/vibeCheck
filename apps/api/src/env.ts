@@ -2,6 +2,7 @@ import { z } from "zod";
 
 const envSchema = z.object({
   PORT: z.string().optional(),
+  FRONTEND_URL: z.string().optional().default("http://localhost:3000"),
 });
 
 function createEnv(env: NodeJS.ProcessEnv) {
