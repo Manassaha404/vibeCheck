@@ -40,3 +40,20 @@ export const updateFormResponseWithoutGuestTokenDto = submitFormResponseWithoutG
 export const formActionDto = z.object({
     formId: z.string().uuid().describe('id of the form'),
 });
+
+export const formSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  slug: z.string(),
+  description: z.string().nullable(),
+  visibility: z.string(),
+  allowResponseEdit: z.boolean(),
+  responseLimit: z.number().nullable(),
+  expiresAt: z.string().nullable(),
+  passwordNeeded: z.boolean(),
+  userId: z.string(),
+  createdAt: z.string().optional(),
+  updatedAt: z.string().optional(),
+});
+
+export const messageSchema = z.object({ message: z.string() });

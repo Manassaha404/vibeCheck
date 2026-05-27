@@ -4,16 +4,27 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  CheckCircle2, Send, Trash2, Edit, AlertCircle, XCircle, TriangleAlert,
+  CheckCircle2,
+  Send,
+  Trash2,
+  Edit,
+  AlertCircle,
+  XCircle,
+  TriangleAlert,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { PasswordProtection } from "./password-protection";
 import { FieldRenderer } from "./field-renderer";
 import { containerVariants, itemVariants } from "./constants";
 import { trpc } from "@/trpc/client";
 import PageLoader from "../PageLoader";
-
 
 function AlertBanner({
   variant,
@@ -25,9 +36,10 @@ function AlertBanner({
   onDismiss?: () => void;
 }) {
   const styles = {
-    error:   "bg-destructive/10 border-destructive/30 text-destructive",
-    warning: "bg-yellow-500/10 border-yellow-500/30 text-yellow-600 dark:text-yellow-400",
-    info:    "bg-primary/10 border-primary/30 text-primary",
+    error: "bg-destructive/10 border-destructive/30 text-destructive",
+    warning:
+      "bg-yellow-500/10 border-yellow-500/30 text-yellow-600 dark:text-yellow-400",
+    info: "bg-primary/10 border-primary/30 text-primary",
   };
   const Icon = variant === "error" ? XCircle : TriangleAlert;
 
@@ -41,7 +53,10 @@ function AlertBanner({
       <Icon className="w-4 h-4 mt-0.5 shrink-0" />
       <p className="flex-1">{message}</p>
       {onDismiss && (
-        <button onClick={onDismiss} className="opacity-60 hover:opacity-100 transition-opacity">
+        <button
+          onClick={onDismiss}
+          className="opacity-60 hover:opacity-100 transition-opacity"
+        >
           <XCircle className="w-4 h-4" />
         </button>
       )}
@@ -49,14 +64,16 @@ function AlertBanner({
   );
 }
 
-
-
 export function FormContainer({ formId }: { formId: string }) {
   const router = useRouter();
-  const utils  = trpc.useUtils();
+  const utils = trpc.useUtils();
 
-  const { data: form, isLoading: isFormLoading, error: formError, refetch: refetchForm } =
-    trpc.form.getFormDataForSubmitForm.useQuery({ formId });
+  const {
+    data: form,
+    isLoading: isFormLoading,
+    error: formError,
+    refetch: refetchForm,
+  } = trpc.form.getFormDataForSubmitForm.useQuery({ formId });
 
   const {
     data: submissionStatus,
@@ -64,19 +81,18 @@ export function FormContainer({ formId }: { formId: string }) {
     refetch: refetchStatus,
   } = trpc.form.isAlreadySubmited.useQuery({ formId });
 
-  const [isUnlocked,   setIsUnlocked]   = useState(false);
-  const [answers,      setAnswers]       = useState<Record<string, any>>({});
-  const [isSubmitting, setIsSubmitting]  = useState(false);
-  const [isSuccess,    setIsSuccess]     = useState(false);
-  const [formError2,   setFormError2]    = useState<string | null>(null);
-
+  const [isUnlocked, setIsUnlocked] = useState(false);
+  const [answers, setAnswers] = useState<Record<string, any>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [formError2, setFormError2] = useState<string | null>(null);
 
   const submitMutation = trpc.form.submitFormResponse.useMutation({
     onSuccess: () => {
       setIsSubmitting(false);
       setIsSuccess(true);
       refetchStatus();
-      refetchForm(); 
+      refetchForm();
     },
     onError: (err) => {
       setIsSubmitting(false);
@@ -84,24 +100,30 @@ export function FormContainer({ formId }: { formId: string }) {
     },
   });
 
-  
   const deleteMutation = trpc.form.deleteFormResponse.useMutation({
     onSuccess: () => {
       setAnswers({});
       setFormError2(null);
-      refetchStatus(); 
-      refetchForm();   
+      refetchStatus();
+      refetchForm();
     },
     onError: (err) => setFormError2(err.message),
   });
 
-  
   const handleUnlock = async (password: string) => {
     try {
-      const isValid = await utils.form.checkFormPassword.fetch({ formId, password });
-      if (isValid) { setIsUnlocked(true); return true; }
+      const isValid = await utils.form.checkFormPassword.fetch({
+        formId,
+        password,
+      });
+      if (isValid) {
+        setIsUnlocked(true);
+        return true;
+      }
       return false;
-    } catch { return false; }
+    } catch {
+      return false;
+    }
   };
 
   const handleFieldChange = (fieldId: string, value: any) =>
@@ -111,7 +133,7 @@ export function FormContainer({ formId }: { formId: string }) {
     e.preventDefault();
     setFormError2(null);
 
-    const missingFields = form!.fields.filter((field) => {
+    const missingFields = form!.fields.filter((field: any) => {
       if (!field.required) return false;
       const val = answers[field.id];
       if (val === undefined || val === null || val === "") return true;
@@ -121,17 +143,24 @@ export function FormContainer({ formId }: { formId: string }) {
 
     if (missingFields.length > 0) {
       setFormError2(
-        `Please fill in: ${missingFields.map((f) => f.label).join(", ")}`
+        `Please fill in: ${missingFields.map((f: any) => f.label).join(", ")}`,
       );
       return;
     }
 
     setIsSubmitting(true);
     const formattedAnswers = Object.entries(answers)
-      .filter(([_, v]) => v !== undefined && v !== null && v !== "" && (!Array.isArray(v) || v.length > 0))
+      .filter(
+        ([_, v]) =>
+          v !== undefined &&
+          v !== null &&
+          v !== "" &&
+          (!Array.isArray(v) || v.length > 0),
+      )
       .map(([fieldId, value]) => ({
         fieldId,
-        value: typeof value === "object" ? JSON.stringify(value) : String(value),
+        value:
+          typeof value === "object" ? JSON.stringify(value) : String(value),
       }));
 
     submitMutation.mutate({ formId: form!.id, answers: formattedAnswers });
@@ -142,11 +171,8 @@ export function FormContainer({ formId }: { formId: string }) {
     deleteMutation.mutate({ formId });
   };
 
- 
   if (isFormLoading || isStatusLoading) {
-    return (
-      <PageLoader/>
-    );
+    return <PageLoader />;
   }
 
   if (formError || !form) {
@@ -158,9 +184,10 @@ export function FormContainer({ formId }: { formId: string }) {
     );
   }
 
-
   if (form.passwordNeeded && !isUnlocked) {
-    return <PasswordProtection onUnlock={handleUnlock} formTitle={form.title} />;
+    return (
+      <PasswordProtection onUnlock={handleUnlock} formTitle={form.title} />
+    );
   }
 
   if (form.responseLimitReached && !submissionStatus?.isSubmitted) {
@@ -181,7 +208,9 @@ export function FormContainer({ formId }: { formId: string }) {
             >
               <TriangleAlert className="w-8 h-8 text-yellow-500" />
             </motion.div>
-            <CardTitle className="text-2xl font-bold">Responses Closed</CardTitle>
+            <CardTitle className="text-2xl font-bold">
+              Responses Closed
+            </CardTitle>
             <CardDescription>
               This form has reached its maximum number of responses (
               {form.responseLimit}) and is no longer accepting new submissions.
@@ -191,7 +220,6 @@ export function FormContainer({ formId }: { formId: string }) {
       </motion.div>
     );
   }
-
 
   if (submissionStatus?.isSubmitted && !isSuccess) {
     return (
@@ -211,10 +239,15 @@ export function FormContainer({ formId }: { formId: string }) {
             >
               <CheckCircle2 className="w-8 h-8 text-primary" />
             </motion.div>
-            <CardTitle className="text-2xl font-bold">Already Submitted</CardTitle>
+            <CardTitle className="text-2xl font-bold">
+              Already Submitted
+            </CardTitle>
             <CardDescription className="text-sm">
               You have already responded to{" "}
-              <span className="font-semibold text-foreground">{form.title}</span>.{" "}
+              <span className="font-semibold text-foreground">
+                {form.title}
+              </span>
+              .{" "}
               {form.allowResponseEdit
                 ? "You can edit your existing response or delete it entirely."
                 : "The form owner has disabled editing of responses."}
@@ -297,12 +330,17 @@ export function FormContainer({ formId }: { formId: string }) {
       animate="visible"
       className="max-w-3xl mx-auto pb-24"
     >
-      <motion.div variants={itemVariants} className="mb-12 text-center md:text-left">
+      <motion.div
+        variants={itemVariants}
+        className="mb-12 text-center md:text-left"
+      >
         <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-foreground mb-4 leading-tight">
           {form.title}
         </h1>
         {form.description && (
-          <p className="text-lg text-muted-foreground max-w-2xl">{form.description}</p>
+          <p className="text-lg text-muted-foreground max-w-2xl">
+            {form.description}
+          </p>
         )}
       </motion.div>
 
@@ -318,7 +356,7 @@ export function FormContainer({ formId }: { formId: string }) {
 
       <form onSubmit={handleSubmit}>
         <AnimatePresence>
-          {form.fields.map((field) => (
+          {form.fields.map((field: any) => (
             <FieldRenderer
               key={field.id}
               field={field}

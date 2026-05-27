@@ -42,7 +42,6 @@ import {
 } from "@/components/ui/dialog";
 import { BorderBeam } from "@/components/ui/border-beam";
 import { trpc } from "../../trpc/client";
-import PageLoader from "../PageLoader";
 
 type VisibilityFilter = "all" | "public" | "unlisted" | "draft";
 
@@ -391,7 +390,6 @@ export function FormGrid({ forms }: FormCardProps) {
           </motion.div>
         )}
       </AnimatePresence>
-      {/* Delete Confirmation Dialog */}
       <Dialog open={!!formToDelete} onOpenChange={(open) => !open && setFormToDelete(null)}>
         <DialogContent>
           <DialogHeader>

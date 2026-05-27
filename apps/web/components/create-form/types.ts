@@ -14,7 +14,6 @@ export const createFormSchema = z.object({
       "Slug may only contain lowercase letters, numbers, and hyphens"
     ),
   description: z.string().max(1000).optional(),
-  // Visibility is always "draft" on creation — unlocked after adding fields
   allowResponseEdit: z.boolean(),
   responseLimit: z
     .number()

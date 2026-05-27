@@ -108,7 +108,7 @@ export class AuthServices {
 
 
 
-    if (auth.verificationOtp && await bcrypt.compare(otp, auth.verificationOtp)) {
+    if (!auth.verificationOtp || !(await bcrypt.compare(otp, auth.verificationOtp))) {
       throw new AppError("BAD_REQUEST", "invalid OTP");
     }
 
@@ -219,7 +219,7 @@ export class AuthServices {
     if (!auth) {
       throw new AppError("NOT_FOUND", "auth not found");
     }
-    if(auth.verificationOtp && await bcrypt.compare(otp, auth.verificationOtp)){
+    if (!auth.verificationOtp || !(await bcrypt.compare(otp, auth.verificationOtp))) {
       throw new AppError("BAD_REQUEST", "invalid OTP");
     }
     if (

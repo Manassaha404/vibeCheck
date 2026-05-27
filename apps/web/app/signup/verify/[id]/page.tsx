@@ -15,6 +15,7 @@ export default function OTPVerificationPage({
 }) {
   const { id } = use(params); 
   const router = useRouter();
+  const utils = trpc.useUtils();
   
   const [otp, setOtp] = useState<string>("");
   const [status, setStatus] = useState<
@@ -26,8 +27,9 @@ export default function OTPVerificationPage({
     onMutate: () => {
       setStatus("submitting");
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       setStatus("success");
+      await utils.auth.getme.invalidate();
       setTimeout(() => {
         router.replace('/');
       }, 2000);

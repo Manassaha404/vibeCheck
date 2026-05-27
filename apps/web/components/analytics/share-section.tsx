@@ -48,19 +48,14 @@ export function ShareSection({ form }:any) {
             </div>
           </div>
         </CardHeader>
-
-        {/* Content: fills remaining height and centers the two-column layout */}
         <CardContent className="flex-1 flex items-center justify-center p-6 overflow-hidden">
           <div className="flex flex-col sm:flex-row items-center justify-center gap-8 w-full max-w-lg">
-
-            {/* QR Code column */}
             <div className="flex flex-col items-center gap-3 shrink-0">
               <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-widest">
                 QR Code
               </p>
               <div className="relative rounded-2xl border border-border bg-[#121214] p-3 shadow-2xl">
                 <div className="absolute inset-0 rounded-2xl bg-primary/5 blur-xl pointer-events-none" />
-                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={qrUrl}
                   alt="QR code for form link"

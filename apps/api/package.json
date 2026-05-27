@@ -4,16 +4,18 @@
   "description": "",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "tsup src/index.ts --format cjs --out-dir dist",
+    "build": "tsup",
     "start": "node dist/index.js"
   },
   "dependencies": {
     "@repo/trpc": "workspace:*",
+    "@scalar/express-api-reference": "^0.9.19",
     "@trpc/server": "^11.8.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "trpc-to-openapi": "^3.3.0",
     "zod": "^4.3.5"
   },
   "devDependencies": {

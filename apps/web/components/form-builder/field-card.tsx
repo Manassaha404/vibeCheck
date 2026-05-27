@@ -75,8 +75,6 @@ export function FieldCard({ field, isSelected, onSelect, onDelete, index }: Fiel
                 <Trash2 className="w-4 h-4" />
               </Button>
             </div>
-
-            {/* Field UI Preview based on type */}
             <div className="pointer-events-none opacity-80">
               {field.type === "short_text" && (
                 <Input placeholder={field.placeholder || "Short text answer"} readOnly />

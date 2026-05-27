@@ -1,4 +1,5 @@
 import { initTRPC, TRPCError } from "@trpc/server";
+import { OpenApiMeta } from "trpc-to-openapi";
 import { createContext } from "./context";
 import { 
   verifyAccessToken, 
@@ -10,10 +11,13 @@ import {
 
 export const tRPCContext = initTRPC
   .context<typeof createContext>()
+  .meta<OpenApiMeta>()
   .create({});
 
 export const router = tRPCContext.router;
 
+
+const isProduction = process.env.NODE_ENV === "production";
 
 const getGuestToken = tRPCContext.middleware(({ctx, next}) => {
   let guestToken;
@@ -22,8 +26,8 @@ const getGuestToken = tRPCContext.middleware(({ctx, next}) => {
     guestToken = crypto.randomUUID();
     ctx.setCookie("guestToken", guestToken, {
       httpOnly: true,
-      secure: false,
-      sameSite: "lax",
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
       maxAge: 60 * 60 * 24 * 365 * 20,
       path: "/",
     });

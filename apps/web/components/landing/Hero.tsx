@@ -1,5 +1,6 @@
 import React from "react";
 import { motion, Variants } from "framer-motion";
+import Link from "next/link";
 import {
   ArrowRight,
   Sparkles,
@@ -60,11 +61,15 @@ export const Hero = () => (
           variants={fadeUp}
           className="flex flex-col sm:flex-row items-center gap-4 mt-4"
         >
-          <Button className="h-12 px-8 text-base">
-            Start Building Free <ArrowRight className="ml-2" size={18} />
+          <Button asChild className="h-12 px-8 text-base">
+            <Link href="/form/create-form">
+              Start Building Free <ArrowRight className="ml-2" size={18} />
+            </Link>
           </Button>
-          <Button variant="outline" className="h-12 px-8 text-base">
-            Go to Dashboard
+          <Button asChild variant="outline" className="h-12 px-8 text-base">
+            <Link href="/dashboard">
+              Go to Dashboard
+            </Link>
           </Button>
         </motion.div>
       </motion.div>

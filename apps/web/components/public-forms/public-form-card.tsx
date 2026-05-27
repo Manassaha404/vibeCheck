@@ -50,8 +50,6 @@ export function PublicFormCard({ form }: PublicFormCardProps) {
                 </p>
               )}
             </div>
-            
-            {/* Password Indicator */}
             {form.passwordNeeded ? (
               <div className="flex items-center gap-1.5 rounded-full bg-amber-500/10 px-2.5 py-1 text-[10px] font-medium text-amber-500 shrink-0">
                 <Lock className="h-3 w-3" />

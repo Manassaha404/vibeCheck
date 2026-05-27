@@ -55,7 +55,7 @@ export function EditResponseContainer({ formId }: { formId: string }) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const missingFields = form!.fields.filter((field) => {
+    const missingFields = form!.fields.filter((field:any) => {
       if (!field.required) return false;
       const val = answers[field.id];
       if (val === undefined || val === null || val === "") return true;
@@ -203,7 +203,7 @@ export function EditResponseContainer({ formId }: { formId: string }) {
       </motion.div>
       <form onSubmit={handleSubmit}>
         <AnimatePresence>
-          {form.fields.map((field) => (
+          {form.fields.map((field:any) => (
             <FieldRenderer
               key={field.id}
               field={field}

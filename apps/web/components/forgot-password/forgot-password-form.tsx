@@ -73,8 +73,6 @@ export function ForgotPasswordForm({
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)}>
             <FieldGroup>
-              
-              {/* Email Field */}
               <Field>
                 <FieldLabel htmlFor="email" className="text-foreground">Email</FieldLabel>
                 <Input
@@ -90,21 +88,15 @@ export function ForgotPasswordForm({
                   </FieldDescription>
                 )}
               </Field>
-
-              {/* Root Error Display */}
               {errors.root && (
                 <FieldDescription className="text-destructive text-center font-medium">
                   {errors.root.message}
                 </FieldDescription>
               )}
-
-              {/* Submit Button */}
               <Field className="mt-2">
                 <Button type="submit" disabled={isPending} className="w-full">
                   {isPending ? "Sending OTP..." : "Send Verification Code"}
                 </Button>
-                
-                {/* Back to Sign in */}
                 <FieldDescription className="text-center mt-4 text-muted-foreground">
                   Remember your password?{" "}
                   <Link href="/signin" className="text-primary hover:underline font-medium">

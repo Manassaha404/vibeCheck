@@ -54,7 +54,7 @@ export function SignupForm({
 
   const { mutate, isPending } = trpc.auth.registerUser.useMutation({
     onSuccess: (data) => {
-      console.log(data);
+
       
       router.push(`/signup/verify/${data?.user?.id}`);
     },
@@ -86,8 +86,6 @@ export function SignupForm({
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)}>
             <FieldGroup>
-              
-              {/* Name Field */}
               <Field>
                 <FieldLabel htmlFor="name">Full Name</FieldLabel>
                 <Input 
@@ -102,8 +100,6 @@ export function SignupForm({
                   </FieldDescription>
                 )}
               </Field>
-
-              {/* Email Field */}
               <Field>
                 <FieldLabel htmlFor="email">Email</FieldLabel>
                 <Input
@@ -118,8 +114,6 @@ export function SignupForm({
                   </FieldDescription>
                 )}
               </Field>
-
-              {/* Password Fields */}
               <Field>
                 <Field className="grid grid-cols-2 gap-4">
                   <Field>
@@ -156,15 +150,11 @@ export function SignupForm({
                   </FieldDescription>
                 )}
               </Field>
-
-              {/* 5. Root Error Display */}
               {errors.root && (
                 <FieldDescription className="text-destructive text-center font-medium">
                   {errors.root.message}
                 </FieldDescription>
               )}
-
-              {/* Submit Button */}
               <Field>
                 <Button type="submit" disabled={isPending}>
                   {isPending ? "Creating Account..." : "Create Account"}

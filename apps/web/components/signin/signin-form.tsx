@@ -36,6 +36,7 @@ export function SigninForm({
   ...props
 }: React.ComponentProps<"div">) {
   const router = useRouter();
+  const utils = trpc.useUtils();
   
   const { 
     register, 
@@ -46,8 +47,9 @@ export function SigninForm({
     resolver: zodResolver(signinSchema),
   });
   const { mutate, isPending } = trpc.auth.loginWithEmailPassword.useMutation({
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       console.log("Logged in:", data);
+      await utils.auth.getme.invalidate();
       router.push(`/`); 
     },
     onError: (err) => {

@@ -56,7 +56,6 @@ export function FormBasicsSection({ form }: FormBasicsSectionProps) {
       </CardHeader>
 
       <CardContent className="space-y-5 pb-6">
-        {/* Title */}
         <div className="space-y-1.5">
           <Label
             htmlFor="title"
@@ -85,8 +84,6 @@ export function FormBasicsSection({ form }: FormBasicsSectionProps) {
             <p className="text-xs text-destructive">{errors.title.message}</p>
           )}
         </div>
-
-        {/* Slug */}
         <div className="space-y-1.5">
           <Label
             htmlFor="slug"
@@ -126,8 +123,6 @@ export function FormBasicsSection({ form }: FormBasicsSectionProps) {
             <p className="text-xs text-destructive">{errors.slug.message}</p>
           )}
         </div>
-
-        {/* Description */}
         <div className="space-y-1.5">
           <Label
             htmlFor="description"

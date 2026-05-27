@@ -24,14 +24,13 @@ import * as z from "zod"
 import { trpc } from "@/trpc/client"
 import { useRouter } from "next/navigation"
 
-// 1. Zod schema for client-side validation
 const resetPasswordSchema = z.object({
   otp: z.string().length(6, { message: "OTP must be exactly 6 digits." }),
   password: z.string().min(8, { message: "Password must be at least 8 characters long." }),
   confirmPassword: z.string(),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords do not match.",
-  path: ["confirmPassword"], // Client-side check attaches error to confirmPassword
+  path: ["confirmPassword"],
 });
 
 type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
@@ -61,12 +60,9 @@ export function ResetPasswordForm({
       confirmPassword: "",
     }
   });
-
-  // 2. Setup your tRPC mutation (Ensure you create 'resetPassword' on your backend!)
   const { mutate, isPending } = trpc.auth.resetPassword.useMutation({
     onSuccess: () => {
       console.log("Password reset successfully!");
-      // Redirect back to sign-in upon success
       router.push(`/signin?reset=success`); 
     },
     onError: (err) => {
@@ -126,8 +122,6 @@ export function ResetPasswordForm({
                   </FieldDescription>
                 )}
               </Field>
-
-              {/* New Password Field */}
               <Field className="mt-4">
                 <FieldLabel htmlFor="password" className="text-foreground">New Password</FieldLabel>
                 <Input 
@@ -143,8 +137,6 @@ export function ResetPasswordForm({
                   </FieldDescription>
                 )}
               </Field>
-
-              {/* Confirm Password Field */}
               <Field>
                 <FieldLabel htmlFor="confirmPassword" className="text-foreground">Confirm New Password</FieldLabel>
                 <Input 
@@ -160,15 +152,11 @@ export function ResetPasswordForm({
                   </FieldDescription>
                 )}
               </Field>
-
-              {/* Root Server Error Display */}
               {errors.root && (
                 <FieldDescription className="text-destructive text-center font-medium">
                   {errors.root.message}
                 </FieldDescription>
               )}
-
-              {/* Submit Button */}
               <Field className="mt-2">
                 <Button type="submit" disabled={isPending} className="w-full">
                   {isPending ? "Resetting Password..." : "Reset Password"}

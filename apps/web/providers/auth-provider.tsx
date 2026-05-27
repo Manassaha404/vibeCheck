@@ -19,7 +19,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (isLoading) return;
     const publicRoutes = ["/", "/signin", "/signup", "/forgot-password"];
-    const isPublicRoute = publicRoutes.includes(pathname);
+    const isPublicRoute = publicRoutes.includes(pathname) || pathname.startsWith("/signup/verify/") || pathname.startsWith("/form/submit/");
     if (isError || !data?.user?.id) {
       setInitialized(true);
       setUserInfo({ id: undefined, email: undefined, fullname: undefined });

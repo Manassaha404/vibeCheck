@@ -1,9 +1,11 @@
 import { CookieOptions, Response, Request } from "express";
 
+const isProduction = process.env.NODE_ENV === "production";
+
 const cookieOptions = {
   httpOnly: true,
-  secure: false,
-  sameSite: "lax",
+  secure: isProduction,
+  sameSite: isProduction ? ("none" as const) : ("lax" as const),
   maxAge: 7 * 24 * 60 * 60 * 1000,
   path: "/",
 };

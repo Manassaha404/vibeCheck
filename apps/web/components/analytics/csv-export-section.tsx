@@ -205,8 +205,6 @@ export function CsvExportSection({ form, fields }: CsvExportSectionProps) {
                 )}
               </AnimatePresence>
             </div>
-
-            {/* Field Selection */}
             <div>
               <div className="flex items-center justify-between mb-3">
                 <label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-widest">

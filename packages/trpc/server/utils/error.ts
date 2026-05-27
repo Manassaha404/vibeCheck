@@ -2,7 +2,7 @@ import { AppError } from "@repo/error";
 import { TRPCError } from "@trpc/server/unstable-core-do-not-import";
 import { z } from "zod";
 
-export const handleRouteError = (error: unknown) => {
+export const handleRouteError = (error: unknown): never => {
   if (error instanceof AppError) {
     throw new TRPCError({
       code: error.code,
@@ -12,7 +12,7 @@ export const handleRouteError = (error: unknown) => {
   if (error instanceof z.ZodError) {
     throw new TRPCError({
       code: "BAD_REQUEST",
-      message: error.errors.map(e => e.message).join(", "),
+      message: error.issues.map((e) => e.message).join(", "),
     });
   }
 
